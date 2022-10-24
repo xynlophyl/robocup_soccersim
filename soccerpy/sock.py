@@ -20,7 +20,7 @@ class Socket:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         # NELSON: adding a bind to a network port for clients to communicate 
-        self.sock.bind((host, port))
+        # self.sock.bind((host, port))
         
     def send(self, msg, append_null_terminator=True):
         """

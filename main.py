@@ -48,8 +48,8 @@ if __name__ == "__main__":
 
     # spawn all agents as seperate processes for maximum processing efficiency
     agentthreads = []
-    # for position in range(1, NUM_PLAYERS+1):
-    for position in range(1, 1+1):
+    for position in range(1, NUM_PLAYERS+1):
+    # for position in range(1, 1+1):
 
         print(f"  Spawning agent {position}...")
 
