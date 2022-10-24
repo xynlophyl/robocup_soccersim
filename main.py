@@ -68,7 +68,7 @@ if __name__ == "__main__":
     try:
         while 1:
             time.sleep(0.05)
-    except KeyboardInterrupt:
+    except KeyboardInterrupt: 
         print()
         print("Killing agent threads...")
 
