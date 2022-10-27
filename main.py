@@ -10,21 +10,24 @@ import os
 # import agent types (positions)
 from agents.ball_agent import Agent as A0
 
+test_agent = A0
+
 # set team
 TEAM_NAME = 'COMP423'
-NUM_PLAYERS = 11
+# NUM_PLAYERS = 11
+NUM_PLAYERS = 10
 
 # return type of agent: midfield, striker etc.
 # NELSON: MOVED FUNCTIONS TO OUTSIDE MAIN CALL
 def agent_type(position):
     return {
-        2: A0,
-        3: A0,
-        4: A0,
-        6: A0,
-        7: A0,
-        8: A0,
-    }.get(position, A0)
+        2: test_agent,
+        3: test_agent,
+        4: test_agent,
+        6: test_agent,
+        7: test_agent,
+        8: test_agent,
+    }.get(position, test_agent)
 
 # spawn an agent of team_name, with position
 def spawn_agent(team_name, position):
@@ -49,7 +52,7 @@ if __name__ == "__main__":
     # spawn all agents as seperate processes for maximum processing efficiency
     agentthreads = []
     for position in range(1, NUM_PLAYERS+1):
-    # for position in range(1, 1+1):
+    # for position in range(1):
 
         print(f"  Spawning agent {position}...")
 

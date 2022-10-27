@@ -31,8 +31,6 @@ class Socket:
         if append_null_terminator:
             msg = msg + "\0"
 
-        print(msg)
-
         self.sock.sendto(msg.encode(), self.address)
     
     def recv(self, conform_address=True):
