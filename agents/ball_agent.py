@@ -87,7 +87,7 @@ class Agent(BaseAgent):
         # self.wm.kick_to(self.enemy_goal_pos, 1.0)
         # self.wm.turn_body_to_point(self.enemy_goal_pos)
 
-        self.wm.kick_to(pos, 1.0)
+        self.wm.kick_to(pos, extra_power=4.0)
         self.wm.turn_body_to_point(pos)
 
         self.wm.align_neck_with_body()
