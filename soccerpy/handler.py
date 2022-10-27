@@ -38,15 +38,11 @@ class MessageHandler:
         # msg = msg.decode() if type(msg) == bytes else msg
 
         # get all the expressions contained in the given message
-        print('handled', msg)
-
         
         parsed = message_parser.parse(msg)
 
-        print('parsed', parsed)
-
         if PRINT_SERVER_MESSAGES:
-            print(parsed[0] + ":", parsed[1:], "\n")
+            print("SERVER", parsed[0] + ":", parsed[1:], "\n")
 
         # this is the name of the function that should be used to handle
         # this message type.  we pull it from this object dynamically to
@@ -127,7 +123,8 @@ class MessageHandler:
                     neck_dir = members[5]
 
             # parse flags
-            if name[0] == 'f':
+            # xynlophyl: updated name values (e.g. f to flag)
+            if name[0] == 'flag':
                 # since the flag's name sometimes contains a number, the parser
                 # recognizes it as such and converts it into an int.  it's
                 # always the last item when it's a number, so we stringify the
@@ -140,7 +137,7 @@ class MessageHandler:
                 new_flags.append(game_object.Flag(distance, direction, flag_id))
 
             # parse players
-            elif name[0] == 'p':
+            elif name[0] == 'player':
                 # extract any available information from the player object's name
                 teamname = None
                 uniform_number = None
@@ -174,7 +171,7 @@ class MessageHandler:
                     uniform_number, body_dir, neck_dir))
 
             # parse goals
-            elif name[0] == 'g':
+            elif name[0] == 'goal':
                 # see if we know which side's goal this is
                 goal_id = None
                 if len(name) > 1:
@@ -183,7 +180,7 @@ class MessageHandler:
                 new_goals.append(game_object.Goal(distance, direction, goal_id))
 
             # parse lines
-            elif name[0] == 'l':
+            elif name[0] == 'line':
                 # see if we know which line this is
                 line_id = None
                 if len(name) > 1:
@@ -192,7 +189,7 @@ class MessageHandler:
                 new_lines.append(game_object.Line(distance, direction, line_id))
 
             # parse the ball
-            elif name[0] == 'b':
+            elif name[0] == 'ball':
                 # TODO: handle speed!
                 new_ball = game_object.Ball(distance, direction, dist_change,
                         dir_change, None)
@@ -200,19 +197,19 @@ class MessageHandler:
             # object very near to but not viewable by the player are 'blank'
 
             # the out-of-view ball
-            elif name[0] == 'B':
+            elif name[0] == 'Ball':
                 new_ball = game_object.Ball(None, None, None, None, None)
 
             # an out-of-view flag
-            elif name[0] == 'F':
+            elif name[0] == 'Flag':
                 new_flags.append(game_object.Flag(None, None, None))
 
             # an out-of-view goal
-            elif name[0] == 'G':
+            elif name[0] == 'Goal':
                 new_goals.append(game_object.Goal(None, None, None))
 
             # an out-of-view player
-            elif name[0] == 'P':
+            elif name[0] == 'Player':
                 new_players.append(game_object.Player(None, None, None, None,
                     None, None, None, None, None, None))
 
@@ -299,6 +296,8 @@ class MessageHandler:
             name = info[0]
             values = info[1:]
 
+            # print('info', name, values)
+
             if name == "view_mode":
                 self.wm.view_quality = values[0]
                 self.wm.view_width = values[1]
@@ -307,7 +306,11 @@ class MessageHandler:
                 self.wm.effort = values[1]
             elif name == "speed":
                 self.wm.speed_amount = values[0]
-                self.wm.speed_direction = values[1]
+                # xynlophyl: ADDING CHECK FOR SPEED DIRECTION
+                if len(values) == 1:
+                    # print('NO DIRECTION VALUE')
+                    self.wm.speed_direction = 0
+                # self.wm.speed_direction = values[1]
             elif name == "head_angle":
                 self.wm.neck_direction = values[0]
 
@@ -331,6 +334,7 @@ class MessageHandler:
 
             # we leave unknown values out of the equation
             else:
+                print('unknown sensor', name, values)
                 pass
 
     def _handle_change_player_type(self, msg):
@@ -476,7 +480,6 @@ class ActionHandler:
             else:
                 if PRINT_SENT_COMMANDS:
                     print("sent:", cmd.text, "\n")
-
                 self.sock.send(cmd.text)
 
             # indicate that we finished processing a command
